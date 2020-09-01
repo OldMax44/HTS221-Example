@@ -1,5 +1,5 @@
 
-**************** UNDER CONSTRUCTION *********************************
+HTS221  Connected to Raspberry Pi Zero W
 
 This example is the HTS221 sensor connected to a Raspberry Pi Zero W.
  With the availability of WiFi, I set up an Apache web server.  A C program
@@ -24,4 +24,9 @@ https://canvas-gauges.com/
 
 <img src = "https://github.com/OldMax44/HTS221-Example/blob/master/images/HTS221_Gauges.JPG" height="647">
 
+The hts221 file is the compiled executable.  It has to be run as root and writes the data.xml file
+out to /var/www/html.  The index.htm file also resides at /var/www/html and is the default web page.
 
+For $10 plus the cost of a microSD card, the RPi Zero W is impressive.  It's not really designed for
+battery operation, however.  It would be nice for a temperature and humidity sensor to operate that way
+and be mobile and self contained.
