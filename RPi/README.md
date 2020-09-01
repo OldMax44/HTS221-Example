@@ -12,3 +12,13 @@ humidity.
 
 Note:  The future of the WiringPi library is undertermined now, but it was
 included in my Raspbian distribution (Buster) and worked well.
+
+![RPi Zero W Wiring](https://github.com/OldMax44/HTS221-Example/blob/master/images/RPi%20Zero%20W%20Wiring%20to%20HTS221.JPG)
+
+I used Netbeans for the C program development as described at:
+https://raspberry-projects.com/pi/programming-in-c/getting-your-raspberry-pi-ready-for-c-programming
+This worked extremey well for code development and debugging.
+
+The gauge library can be found at:
+https://canvas-gauges.com/
+
