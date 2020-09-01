@@ -22,3 +22,6 @@ This worked extremey well for code development and debugging.
 The gauge library can be found at:
 https://canvas-gauges.com/
 
+![Gauges Page](https://github.com/OldMax44/HTS221-Example/blob/master/images/HTS221_Gauges.JPG)
+
+
