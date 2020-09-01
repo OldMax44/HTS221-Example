@@ -1,5 +1,5 @@
 
-HTS221  Connected to Raspberry Pi Zero W
+## HTS221  Connected to Raspberry Pi Zero W
 
 This example is the HTS221 sensor connected to a Raspberry Pi Zero W.
  With the availability of WiFi, I set up an Apache web server.  A C program
