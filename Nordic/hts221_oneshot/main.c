@@ -153,8 +153,8 @@ int16_t T_Out = 0;
 float tempFloat = 0.0;
 float tempF = 0.0;
 //
-// Raw Temperature array
-// 2 bytes read from registers 0x2A (LSB) and 0x2B (MSB)
+// Raw Humidity array
+// 2 bytes read from registers 0x28 (LSB) and 0x29 (MSB)
 //
 uint8_t raw_hum[2] = {0};
 //
