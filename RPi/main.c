@@ -247,7 +247,7 @@ int main(int argc, char** argv)
           {
               Read1_loop++;
               delay(1); // Delay 1 msec before reading status again
-              goto READ1; // Wait for humidity conversion to complete
+              goto READ1; // Wait for temperature conversion to complete
           }
           //
           // Read and compute humidity
@@ -287,7 +287,7 @@ int main(int argc, char** argv)
           {
               Read2_loop++;
               delay(1); // Delay 1 msec before reading status again
-              goto READ2; // Wait for data to be ready
+              goto READ2; // Wait for humidity data to be ready
           }
         printf("\n\nRead1 Loop Count = %d \n",Read1_loop);        
         printf("Read2 Loop Count = %d \n\n",Read2_loop);          
