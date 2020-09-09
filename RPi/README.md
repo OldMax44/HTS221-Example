@@ -2,11 +2,17 @@
 ## HTS221  Connected to Raspberry Pi Zero W
 
 This example is the HTS221 sensor connected to a Raspberry Pi Zero W.
- With the availability of WiFi, I set up an Apache web server.  A C program
-communicates with the HTS221 sensor via the I2C bus using the WiringPi
+ With the availability of WiFi, I set up an Apache web server.  
+ 
+A basic C program communicates with the HTS221 sensor via the I2C bus using the WiringPi
 library.  It reads the calibration coefficients, takes sensor readings, and
-runs the interpolation calculation.  It's an old technique, but the C program
-then writes a simple XML file that is periodcally read by the served web
+runs the interpolation calculation.  Print satements show the calibration coefficients
+and the readings for temperature and humidity.  The program just executes a single one shot 
+conversion.  Status is checked once a msec after the conversion is launched as a crude
+time to convert measure.
+
+It's an old technique, but the C program
+writes a simple XML file that is periodcally read by the served web
 page.  I also included some radial guages to display the temperature and
 humidity.
 
