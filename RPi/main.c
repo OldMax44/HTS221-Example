@@ -74,6 +74,9 @@ int main(int argc, char** argv)
         float H0_T0_Out = 0;
         float H1_T0_Out = 0;
         
+        int Read1_loop = 0;
+        int Read2_loop = 0;
+        
         FILE * pFile;
         
         //char sampleTime[];
@@ -89,24 +92,19 @@ int main(int argc, char** argv)
         }
         else
         {
+          //
           // Read Who Am I
           //
-          // First send HTS221 write to subaddress 0x0F (Who Am I register)
-          //
-          data = wiringPiI2CWrite (fd , 0x0F);
+          data = wiringPiI2CReadReg8 (fd , 0x0F);
           if(data==-1)
             {
-                printf("Error setting register address\n");
+                printf("Error reading ID register\n");
                 return -1;
            }
           //
-          // Then issue read of the register
-          //
-          data=wiringPiI2CRead (fd);
-          //
           // Print data
           //
-          //printf("Who Am I = %hhX\n", data);
+          printf("Who Am I = %hhX\n", data);
           //
           // Set configuration to run 256 temperature samples and 512 humidity samples
           //
@@ -118,17 +116,13 @@ int main(int argc, char** argv)
           //
           // Read temperature coefficients
           //
-          // Read temperature calibration registers
-           data = wiringPiI2CWrite (fd , 0x32);
-           reg32 = wiringPiI2CRead (fd);
+           reg32 = wiringPiI2CReadReg8 (fd, 0x32);
           //
-           data = wiringPiI2CWrite (fd , 0x33);
-           reg33 = wiringPiI2CRead (fd);
+           reg33 = wiringPiI2CReadReg8 (fd, 0x33);
           //
           // Read MS bits from reg 35
           //
-           data = wiringPiI2CWrite (fd , 0x35);
-           reg35 = wiringPiI2CRead (fd);
+           reg35 = wiringPiI2CReadReg8 (fd, 0x35);
            // Combine LSB and MSB
            // Set as floating point for the interpolation calculation
            // Also retains any fractional remainder from the divide by 8
@@ -137,24 +131,21 @@ int main(int argc, char** argv)
           //
           // Read T0_Out and T1_Out
           //
-           data = wiringPiI2CWrite (fd , 0x3C);
-           reg3C = wiringPiI2CRead (fd);
-           data = wiringPiI2CWrite (fd , 0x3D);
-           reg3D = wiringPiI2CRead (fd);
+           reg3C = wiringPiI2CReadReg8 (fd, 0x3C);
+           reg3D = wiringPiI2CReadReg8 (fd, 0x3D);
            // Combine LSB and MSB and convert to floating point
            T0_Out = (float)(reg3D << 8 | reg3C);
-           data = wiringPiI2CWrite (fd , 0x3E);
-           reg3E = wiringPiI2CRead (fd);
-           data = wiringPiI2CWrite (fd , 0x3F);
-           reg3F = wiringPiI2CRead (fd);
+           //
+           reg3E = wiringPiI2CReadReg8 (fd, 0x3E);
+           reg3F = wiringPiI2CReadReg8 (fd, 0x3F);
            // Combine LSB and MSB and convert to floating point
            T1_Out = (float)(reg3F << 8 | reg3E);
          
-           //printf("\n\nT0_DegC = %f \n", temp_T0_DegC);
-           //printf("T1_DegC = %f \n", temp_T1_DegC);
+           printf("\n\nT0_DegC = %f \n", temp_T0_DegC);
+           printf("T1_DegC = %f \n", temp_T1_DegC);
            
-           //printf("T0_Out = %f \n", T0_Out);
-           //printf("T1_Out = %f \n", T1_Out);
+           printf("T0_Out = %f \n", T0_Out);
+           printf("T1_Out = %f \n", T1_Out);
            
           //
           // Set up Humidity interpolation
@@ -164,83 +155,79 @@ int main(int argc, char** argv)
           //
           // Read humidity calibration registers
           //
-           data = wiringPiI2CWrite (fd , 0x30);
-           reg30 = wiringPiI2CRead (fd);
+           reg30 = wiringPiI2CReadReg8 (fd, 0x30);
            // Set as floating point for the interpolation calculation
            // Also retains any fractional remainder from the divide by 2
            H0_rH = (float)(reg30)/2.0;
            //
-           data = wiringPiI2CWrite (fd , 0x31);
-           reg31 = wiringPiI2CRead (fd);
+           reg31 = wiringPiI2CReadReg8 (fd, 0x31);
            // Set as floating point for the interpolation calculation
            // Also retains any fractional remainder from the divide by 2
            H1_rH = (float)(reg31)/2.0;
           //
           // Read H0_T0_Out and H1_T0_Out
           //
-           data = wiringPiI2CWrite (fd , 0x36);
-           reg36 = wiringPiI2CRead (fd);
-           data = wiringPiI2CWrite (fd , 0x37);
-           reg37 = wiringPiI2CRead (fd);
+           reg36 = wiringPiI2CReadReg8 (fd, 0x36);
+           reg37 = wiringPiI2CReadReg8 (fd, 0x37);
            // Combine the LSB and MSB
            // Note: This is a signed integer
            reg3736 = ((reg37 << 8) | reg36);
            // Convert to floating point for the interpolation calculation
            H0_T0_Out = (float)reg3736;
-           data = wiringPiI2CWrite (fd , 0x3A);
-           reg3A = wiringPiI2CRead (fd);
-           data = wiringPiI2CWrite (fd , 0x3B);
-           reg3B = wiringPiI2CRead (fd);
+           //
+           reg3A = wiringPiI2CReadReg8 (fd, 0x3A);
+           reg3B = wiringPiI2CReadReg8 (fd, 0x3B);
            // Combine the LSB and MSB
            // Note: This is a signed integer
            reg3B3A = ((reg3B << 8) | reg3A);
            // Convert to floating point for the interpolation calculation
            H1_T0_Out = (float)reg3B3A;
          
-           //printf("\n\nH0_rH = %f \n", H0_rH);
-           //printf("H1_rH = %f \n", H1_rH);
+           printf("\n\nH0_rH = %f \n", H0_rH);
+           printf("H1_rH = %f \n", H1_rH);
            
-           //printf("H0_T0_Out = %f \n", H0_T0_Out);
-           //printf("H1_T0_Out = %f \n", H1_T0_Out);
+           printf("H0_T0_Out = %f \n", H0_T0_Out);
+           printf("H1_T0_Out = %f \r\n\r\n", H1_T0_Out);
 
-           
-           //*************************************************
           //
-          // Set one shot enable
+          //*************************************************
+          //
+          // Read registers 2B and 29 to clear status bits
+          // data is not used
+          //
+           data = wiringPiI2CReadReg8 (fd, 0x2B);
+           data = wiringPiI2CReadReg8 (fd, 0x29);
+          //
+          // Set one shot enable to start a conversion
           //
           wiringPiI2CWriteReg8 (fd, 0x21, 0b00000001) ;        
           //
           // See if data is ready to read
           // Check status for temperature first
+          // Note: Temperature iterations known to complete faster than the
+          // the humidity for the settings used
           //
-          // First send HTS221 write to subaddress 0x27 (Status register)
-          //
-          READ1: data = wiringPiI2CWrite (fd , 0x27);
+          READ1: data = wiringPiI2CReadReg8 (fd , 0x27);
           // Check for error
           if(data==-1)
             {
                 printf("Error reading status\n");
                 return -1;
            }
+          printf("Status = %hhX\n", data);
           
-          //
-          // Read the status
-          //
-          data=wiringPiI2CRead (fd);
           if (data & 0x01) // Check if data is ready
            {
            // Read temperature LSB
-           data = wiringPiI2CWrite (fd , 0x2A);
-           temp_lsb = wiringPiI2CRead (fd);
+           temp_lsb = wiringPiI2CReadReg8 (fd, 0x2A);
            T_Out = temp_lsb;
            // Read temperature MSB
-           data = wiringPiI2CWrite (fd , 0x2B);
-           temp_msb = wiringPiI2CRead (fd);
+           temp_msb = wiringPiI2CReadReg8 (fd, 0x2B);
            T_Out = T_Out | (temp_msb << 8);
            //
-           //printf("\n\nRaw temperature = %hd \n",T_Out);
-           //printf("Temp MSB = %hhX \n", temp_msb);
-           //printf("Temp LSB = %hhX \n\r", temp_lsb);
+           printf("\n\nRaw temperature = %hd \n",T_Out);
+           printf("Temp MSB = %hhX \n", temp_msb);
+           printf("Temp LSB = %hhX \n\r", temp_lsb);
 
           //
           // Compute Temperature
@@ -252,37 +239,39 @@ int main(int argc, char** argv)
            tempFloat = ((temp_T1_DegC - temp_T0_DegC) * ((float)T_Out - T0_Out)/(T1_Out - T0_Out)) + temp_T0_DegC;
            tempF = (tempFloat * 9.0/5.0) + 32.0;
           //
-            printf("Computed Temperature = %3.1f °C %3.1f °F \n",tempFloat, tempF);
+            printf("\r\nComputed Temperature = %3.1f °C %3.1f °F \r\n\r\n",tempFloat, tempF);
 
            
           }
-          else goto READ1;
+          else 
+          {
+              Read1_loop++;
+              delay(1); // Delay 1 msec before reading status again
+              goto READ1; // Wait for humidity conversion to complete
+          }
           //
           // Read and compute humidity
           //
           //
-          // First send HTS221 write to subaddress 0x27 (Status register)
-          //
-          READ2: data = wiringPiI2CWrite (fd , 0x27);
-          //
           // Read the status
+          //          
+          READ2: data = wiringPiI2CReadReg8 (fd , 0x27);
           //
-          data=wiringPiI2CRead (fd);
+          printf("Status = %hhX\n", data);
+          //
           if (data & 0x02) // Check if humidity data is ready
           {
            // Read humidity LSB
-           data = wiringPiI2CWrite (fd , 0x28);
-           H_lsb = wiringPiI2CRead (fd);
+           H_lsb = wiringPiI2CReadReg8 (fd, 0x28);
            // Read humidity MSB
-           data = wiringPiI2CWrite (fd , 0x29);
-           H_msb = wiringPiI2CRead (fd);
+           H_msb = wiringPiI2CReadReg8 (fd, 0x29);
            // Combine LSB and MSB
            // Note: Result is a signed integer
            H_Out = H_lsb | (H_msb << 8);
            //
-           //printf("\n\nRaw humidity = %hd \n",H_Out);
-           //printf("Humidity MSB = %hhX \n", H_msb);
-           //printf("Humidity LSB = %hhX \n\r", H_lsb);
+           printf("\n\nRaw humidity = %hd \n",H_Out);
+           printf("Humidity MSB = %hhX \n", H_msb);
+           printf("Humidity LSB = %hhX \n\r", H_lsb);
            //
            // Compute humidity
            //
@@ -292,10 +281,16 @@ int main(int argc, char** argv)
            //
            humFloat = (((H1_rH - H0_rH)*((float)H_Out - H0_T0_Out))/(H1_T0_Out) - H0_T0_Out) +  H0_rH;
           //
-          printf("Computed Humidity = %3.1f%% \n",humFloat);
+          printf("\r\nComputed Humidity = %3.1f%% \r\n",humFloat);
           }
           else
+          {
+              Read2_loop++;
+              delay(1); // Delay 1 msec before reading status again
               goto READ2; // Wait for data to be ready
+          }
+        printf("\n\nRead1 Loop Count = %d \n",Read1_loop);        
+        printf("Read2 Loop Count = %d \n\n",Read2_loop);          
         }
         //
         // Get the current time for a timestamp in the xml file
