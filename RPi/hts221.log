@@ -1,0 +1,66 @@
+Who Am I = BC
+
+
+T0_DegC = 20.500000 
+T1_DegC = 33.875000 
+T0_Out = 1.000000 
+T1_Out = 720.000000 
+
+
+H0_rH = 31.500000 
+H1_rH = 70.000000 
+H0_T0_Out = 4.000000 
+H1_T0_Out = -12327.000000 
+
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 1
+
+
+Raw temperature = 273 
+Temp MSB = 1 
+Temp LSB = 11 
+
+Computed Temperature = 25.6 °C 78.0 °F 
+
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 0
+Status = 2
+
+
+Raw humidity = -8830 
+Humidity MSB = DD 
+Humidity LSB = 82 
+
+Computed Humidity = 55.1% 
+
+
+Read1 Loop Count = 10 
+Read2 Loop Count = 20 
+
